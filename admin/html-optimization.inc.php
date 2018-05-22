@@ -232,21 +232,26 @@ add_filter('o10n_link_filter', function($link, $href, $set_attrs, $set_class) {
             <input type="hidden" class="json" name="o10n[html.linkfilter.observer.filter.config]" data-json-type="json-array" data-json-editor-height="auto" data-json-editor-init="1" value="<?php print esc_attr($json('html.linkfilter.observer.filter.config')); ?>" />
             <p class="description">Enter a JSON array with objects. (<a href="javascript:void(0);" onclick="jQuery('#linkfilter_observer_filter_example').fadeToggle();">show example</a>)</p>
             <div class="info_yellow" id="linkfilter_observer_filter_example" style="display:none;"><strong>Example:</strong> <pre class="clickselect" title="<?php print esc_attr('Click to select', 'optimization'); ?>" style="cursor:copy;padding: 10px;margin: 0 1px;margin-top:5px;font-size: 13px;">[
-    "page-url",
-    "/other/page/url",
-    {
-        "match": "uri",
-        "string": "/page-uri-(x|y)/",
-        "regex": true
-    },
-    {
-        "match": "condition",
-        "method": "is_page",
-        "arguments": [[1,6,19]]
+  {
+    "match": "/wp-content\\/uploads\\/.*800x600\\.jpg/",
+    "regex": true,
+    "attributes": [
+      {
+        "param": "data-photo-viewer",
+        "value": "800x600,1"
+      }
+    ],
+    "class": [
+      "photo-viewer",
+      "big-img"
+    ],
+    "rel_noopener": "noreferrer",
+    "cdn": {
+      "url": "https://img.mydomain.com",
+      "mask": "/wp-content/uploads/"
     }
+  }
 ]</pre></div>
-
-    
 
         </td>
     </tr>
