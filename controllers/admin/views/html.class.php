@@ -133,8 +133,42 @@ class AdminViewHtml extends AdminViewBase
                     'html.minify.minifier' => 'string',
                     'html.remove_comments.enabled' => 'bool',
                     'html.remove_comments.preserve' => 'newline_array',
-                    'html.replace' => 'json-array'
+                    'html.replace' => 'json-array',
+
+                    'html.linkfilter.enabled' => 'bool',
+                    'html.linkfilter.filter.enabled' => 'bool',
+                    'html.linkfilter.filter.type' => 'string',
+
+                    'html.linkfilter.rel_noopener.enabled' => 'bool',
+                    'html.linkfilter.rel_noopener.type' => 'string',
+
+                    'html.linkfilter.observer.enabled' => 'bool',
+                    'html.linkfilter.observer.filter.enabled' => 'bool',
+                    'html.linkfilter.observer.filter.type' => 'string',
+
+                    'html.linkfilter.cdn.enabled' => 'bool'
                 ));
+
+                // link filter
+                if ($forminput->bool('html.linkfilter.enabled') && $forminput->bool('html.linkfilter.filter.enabled')) {
+                    $forminput->type_verify(array(
+                        'html.linkfilter.filter.config' => 'json-array'
+                    ));
+                }
+
+                // observer filter
+                if ($forminput->bool('html.linkfilter.enabled') && $forminput->bool('html.linkfilter.observer.enabled') && $forminput->bool('html.linkfilter.observer.filter.enabled')) {
+                    $forminput->type_verify(array(
+                        'html.linkfilter.observer.filter.config' => 'json-array'
+                    ));
+                }
+
+                // cdn
+                if ($forminput->bool('html.linkfilter.cdn.enabled')) {
+                    $forminput->type_verify(array(
+                        'html.linkfilter.cdn.url' => 'string'
+                    ));
+                }
 
                 $minifier = $forminput->get('html.minify.minifier');
                 if ($minifier === 'voku-htmlmin') {

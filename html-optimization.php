@@ -12,7 +12,7 @@ namespace O10n;
  * @wordpress-plugin
  * Plugin Name:       HTML Optimization
  * Description:       Advanced HTML optimization toolkit. Minify, code optimization, search & replace, strip comments and more.
- * Version:           0.0.20
+ * Version:           0.0.21
  * Author:            Optimization.Team
  * Author URI:        https://optimization.team/
  * GitHub Plugin URI: https://github.com/o10n-x/wordpress-html-optimization
@@ -30,7 +30,7 @@ if (defined('WP_INSTALLING') && WP_INSTALLING) {
 }
 
 // settings
-$module_version = '0.0.20';
+$module_version = '0.0.21';
 $minimum_core_version = '0.0.44';
 $plugin_path = dirname(__FILE__);
 
@@ -49,6 +49,7 @@ new Module(
         'core' => array(
             'tools',
             'http',
+            'client',
             'html'
         ),
         'admin' => array(
