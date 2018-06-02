@@ -27,7 +27,7 @@ Installing and updating the plugins is possible using Github Updater. It is easy
 A recent update of all plugins contains a easy single click install button.
 
 ![image](https://user-images.githubusercontent.com/8843669/39661507-cc1eac5e-5052-11e8-8fba-33c0cc959b07.png)
-</details>. 
+</details>
 
 ## WordPress WPO Collection
 
