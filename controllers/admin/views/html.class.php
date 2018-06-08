@@ -33,7 +33,8 @@ class AdminViewHtml extends AdminViewBase
         return parent::construct($Core, array(
             'json',
             'file',
-            'AdminClient'
+            'AdminClient',
+            'AdminHtml'
         ));
     }
     
@@ -67,14 +68,7 @@ class AdminViewHtml extends AdminViewBase
      */
     final public function help_tab()
     {
-        $data = array(
-            'name' => __('HTML Optimization', 'o10n'),
-            'github' => 'https://github.com/o10n-x/wordpress-html-optimization',
-            'wordpress' => 'https://wordpress.org/support/plugin/html-optimization',
-            'docs' => 'https://github.com/o10n-x/wordpress-html-optimization/tree/master/docs'
-        );
-
-        return $data;
+        return $this->AdminHtml->help_tab();
     }
 
     /**
