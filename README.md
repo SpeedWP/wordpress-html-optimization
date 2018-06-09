@@ -7,6 +7,8 @@ Advanced HTML optimization toolkit. Minify, code optimization, search & replace,
 * [Documentation](https://github.com/o10n-x/wordpress-html-optimization/tree/master/docs)
 * [Description](https://github.com/o10n-x/wordpress-html-optimization#description)
 * [Version history (Changelog)](https://github.com/o10n-x/wordpress-html-optimization/releases)
+* [About WordPress WPO Collection](https://github.com/o10n-x/wordpress-html-optimization#wordpress-wpo-collection)
+
 ## Installation
 
 ![Github Updater](https://github.com/afragen/github-updater/raw/develop/assets/GitHub_Updater_logo_small.png)
