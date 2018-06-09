@@ -62,3 +62,41 @@ For SEO it is therefor simple: websites will need to meet the standards set by t
 A perfect Google Lighthouse Score includes validation of a website as a [Progressive Web App (PWA)](https://developers.google.com/web/progressive-web-apps/).
 
 Google offers another new website performance test that is much tougher than the Google PageSpeed score. It is based on a AI neural network and it can be accessed on https://testmysite.thinkwithgoogle.com
+
+## Description
+
+This plugin is a toolkit for advanced HTML optimization.
+
+The plugin provides in a complete solution for HTML optimization including HTML minification, selective removal of comments and search & replace.
+
+#### Multiple minifiers + custom minifier
+
+The plugin provides the option to minify HTML code using multiple HTML minifiers including [Minify's HTML.php](https://github.com/mrclay/minify/) (PHP), [HtmlMin](https://github.com/voku/HtmlMin) (based on PHP 7 [symfony/css-selector](https://github.com/symfony/css-selector)) and the option to use a custom minifier using a WordPress filter that enables to use any solution, including a Amazon Lambda or Google Cloud function with Node.js based HTML optimization software. 
+
+![HTML Optimization](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/html-code-optimization.png)
+
+#### HtmlMin configuration
+
+HtmlMin minifier provides many options for tuning the quality of the code minification.
+
+![HtmlMin config](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/htmlmin-php7.png)
+
+The plugin provides in a complete solution for CSS code optimization, CSS delivery optimization (async CSS loading) and Critical CSS management.
+
+### Link Optimization
+
+The plugin provides advanced HTML link (`<a href`) optimization that includes a MutationObserver innovation to capture and optimize script injected links. This solution enables to add `rel=noopener` to links to achieve a perfect Google Lighthouse score. 
+
+A JSON config filter enables to add, rename or remove attribute and classes.
+
+![Link Optimization](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/link-optimization.png)
+
+### Image Optimization
+
+The plugin provides advanced HTML image (`<img`) optimization.
+
+A JSON config filter enables to add, rename or remove attribute and classes.
+
+![Image Optimization](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/image-optimization.png)
+
+Additional features can be requested on the [Github forum](https://github.com/o10n-x/wordpress-html-optimization/issues).
