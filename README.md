@@ -33,7 +33,7 @@ A recent update of all plugins contains a easy single click install button.
 
 ## Description
 
-This plugin is a toolkit for advanced HTML optimization.
+This plugin is a toolkit for advanced HTML code optimization.
 
 The plugin provides in a complete solution for HTML optimization including HTML minification, selective removal of comments and search & replace.
 
@@ -60,6 +60,7 @@ add_filter('o10n_html_custom_minify', function ($HTML) {
 });
 ```
 </details>
+
 
 ![HTML Optimization](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/html-code-optimization.png)
 
