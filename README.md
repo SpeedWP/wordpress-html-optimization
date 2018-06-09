@@ -29,6 +29,44 @@ A recent update of all plugins contains a easy single click install button.
 ![image](https://user-images.githubusercontent.com/8843669/39661507-cc1eac5e-5052-11e8-8fba-33c0cc959b07.png)
 </details>
 
+## Description
+
+This plugin is a toolkit for advanced HTML optimization.
+
+The plugin provides in a complete solution for HTML optimization including HTML minification, selective removal of comments and search & replace.
+
+#### Multiple minifiers + custom minifier
+
+The plugin provides the option to minify HTML code using multiple HTML minifiers including [Minify's HTML.php](https://github.com/mrclay/minify/) (PHP), [HtmlMin](https://github.com/voku/HtmlMin) (based on PHP 7 [symfony/css-selector](https://github.com/symfony/css-selector)) and the option to use a custom minifier using a WordPress filter that enables to use any solution, including a Amazon Lambda or Google Cloud function with Node.js based HTML optimization software. 
+
+![HTML Optimization](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/html-code-optimization.png)
+
+#### HtmlMin configuration
+
+HtmlMin minifier provides many options for tuning the quality of the code minification.
+
+![HtmlMin config](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/htmlmin-php7.png)
+
+The plugin provides in a complete solution for CSS code optimization, CSS delivery optimization (async CSS loading) and Critical CSS management.
+
+### Link Optimization
+
+The plugin provides advanced HTML link (`<a href`) optimization that includes a MutationObserver innovation to capture and optimize script injected links. This solution enables to add `rel=noopener` to links to achieve a perfect Google Lighthouse score. 
+
+A JSON config filter enables to add, rename or remove attribute and classes, modify `href` and to apply a CDN with CDN mask.
+
+![Link Optimization](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/link-optimization.png)
+
+### Image Optimization
+
+The plugin provides advanced HTML image (`<img`) optimization.
+
+A JSON config filter enables to add, rename or remove attributes and classes, modify `src` and `srcset` and to apply a CDN with CDN mask.
+
+![Image Optimization](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/image-optimization.png)
+
+Additional features can be requested on the [Github forum](https://github.com/o10n-x/wordpress-html-optimization/issues).
+
 ## WordPress WPO Collection
 
 This plugin is part of a Website Performance Optimization collection that include [CSS](https://github.com/o10n-x/wordpress-css-optimization), [Javascript](https://github.com/o10n-x/wordpress-javascript-optimization), [Web Font](https://github.com/o10n-x/wordpress-font-optimization), [HTTP/2](https://github.com/o10n-x/wordpress-http2-optimization), [Progressive Web App (Service Worker)](https://github.com/o10n-x/wordpress-pwa-optimization) and [Security Header](https://github.com/o10n-x/wordpress-security-header-optimization) optimization. 
@@ -62,41 +100,3 @@ For SEO it is therefor simple: websites will need to meet the standards set by t
 A perfect Google Lighthouse Score includes validation of a website as a [Progressive Web App (PWA)](https://developers.google.com/web/progressive-web-apps/).
 
 Google offers another new website performance test that is much tougher than the Google PageSpeed score. It is based on a AI neural network and it can be accessed on https://testmysite.thinkwithgoogle.com
-
-## Description
-
-This plugin is a toolkit for advanced HTML optimization.
-
-The plugin provides in a complete solution for HTML optimization including HTML minification, selective removal of comments and search & replace.
-
-#### Multiple minifiers + custom minifier
-
-The plugin provides the option to minify HTML code using multiple HTML minifiers including [Minify's HTML.php](https://github.com/mrclay/minify/) (PHP), [HtmlMin](https://github.com/voku/HtmlMin) (based on PHP 7 [symfony/css-selector](https://github.com/symfony/css-selector)) and the option to use a custom minifier using a WordPress filter that enables to use any solution, including a Amazon Lambda or Google Cloud function with Node.js based HTML optimization software. 
-
-![HTML Optimization](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/html-code-optimization.png)
-
-#### HtmlMin configuration
-
-HtmlMin minifier provides many options for tuning the quality of the code minification.
-
-![HtmlMin config](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/htmlmin-php7.png)
-
-The plugin provides in a complete solution for CSS code optimization, CSS delivery optimization (async CSS loading) and Critical CSS management.
-
-### Link Optimization
-
-The plugin provides advanced HTML link (`<a href`) optimization that includes a MutationObserver innovation to capture and optimize script injected links. This solution enables to add `rel=noopener` to links to achieve a perfect Google Lighthouse score. 
-
-A JSON config filter enables to add, rename or remove attribute and classes.
-
-![Link Optimization](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/link-optimization.png)
-
-### Image Optimization
-
-The plugin provides advanced HTML image (`<img`) optimization.
-
-A JSON config filter enables to add, rename or remove attribute and classes.
-
-![Image Optimization](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/image-optimization.png)
-
-Additional features can be requested on the [Github forum](https://github.com/o10n-x/wordpress-html-optimization/issues).
