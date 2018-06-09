@@ -79,6 +79,13 @@ add_filter('o10n_link_filter', function($link, $href, $set_attrs, $set_class, $r
       {
         "param": "data-photo-viewer",
         "value": "800x600,1"
+      },
+      {
+        "rename": "href",
+        "param": "data-href"
+      },
+      {
+        "delete": "param-to-delete"
       }
     ],
     "class": [

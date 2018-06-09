@@ -70,22 +70,25 @@ add_filter('o10n_image_filter', function($img, $src, $srcset, $set_attrs, $set_c
             <p class="description">Enter a JSON array with objects. (<a href="javascript:void(0);" onclick="jQuery('#linkfilter_filter_example').fadeToggle();">show example</a>)</p>
             <div class="info_yellow" id="linkfilter_filter_example" style="display:none;"><strong>Example:</strong> <pre class="clickselect" title="<?php print esc_attr('Click to select', 'optimization'); ?>" style="cursor:copy;padding: 10px;margin: 0 1px;margin-top:5px;font-size: 13px;">[
   {
-    "match": "/wp-content\\/uploads\\/.*800x600\\.jpg/",
+    "match": "/image-to-match\\.js/",
     "regex": true,
     "attributes": [
       {
         "param": "width",
         "value": "100%"
+      },
+      {
+        "rename": "src",
+        "param": "data-src"
+      },
+      {
+        "delete": "param-to-delete"
       }
     ],
     "class": [
       "photo-viewer",
       "big-img"
-    ],
-    "cdn": {
-      "url": "https://img.mydomain.com",
-      "mask": "/wp-content/uploads/"
-    }
+    ]
   }
 ]</pre></div>
 
