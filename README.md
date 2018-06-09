@@ -41,6 +41,26 @@ The plugin provides in a complete solution for HTML optimization including HTML 
 
 The plugin provides the option to minify HTML code using multiple HTML minifiers including [Minify's HTML.php](https://github.com/mrclay/minify/) (PHP), [HtmlMin](https://github.com/voku/HtmlMin) (based on PHP 7 [symfony/css-selector](https://github.com/symfony/css-selector)) and the option to use a custom minifier using a WordPress filter that enables to use any solution, including a Amazon Lambda or Google Cloud function with Node.js based HTML optimization software. 
 
+<details/>
+  <summary>Show custom minifier example</summary>
+
+```php
+/* Custom HTML minifier */
+add_filter('o10n_html_custom_minify', function ($HTML) {
+
+    // apply html optimization
+    exec('/node /path/to/optimize-html.js /tmp/html-source.html');
+    $minified = file_get_contents('/tmp/output.html');
+
+    // alternative
+    $minified = HTMLCompressor::minify($HTML);
+
+    return $minified;
+
+});
+```
+</details>
+
 ![HTML Optimization](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/html-code-optimization.png)
 
 ### HtmlMin configuration
