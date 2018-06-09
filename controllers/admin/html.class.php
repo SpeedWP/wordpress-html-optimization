@@ -22,9 +22,13 @@ class AdminHtml extends ModuleAdminController implements Module_Admin_Controller
             'title' => '<span class="dashicons dashicons-admin-home"></span>',
             'title_attr' => 'Intro'
         ),
-        'optimization' => array(
-            'title' => 'Optimization',
-            'title_attr' => 'HTML Optimization'
+        'code' => array(
+            'title' => '<span class="dashicons dashicons-editor-code"></span> Code Optimization',
+            'title_attr' => 'HTML Code Optimization'
+        ),
+        'links' => array(
+            'title' => '<span class="dashicons dashicons-admin-links"></span> Link Optimization',
+            'title_attr' => 'HTML Link Optimization'
         )
     );
     /**
@@ -93,7 +97,7 @@ class AdminHtml extends ModuleAdminController implements Module_Admin_Controller
      */
     final public function settings_link($links)
     {
-        $settings_link = '<a href="'.esc_url(add_query_arg(array('page' => 'o10n-html','tab' => 'optimization'), admin_url($this->admin_base))).'">'.__('Settings').'</a>';
+        $settings_link = '<a href="'.esc_url(add_query_arg(array('page' => 'o10n-html','tab' => 'code'), admin_url($this->admin_base))).'">'.__('Settings').'</a>';
         array_unshift($links, $settings_link);
 
         return $links;

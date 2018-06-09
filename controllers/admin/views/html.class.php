@@ -96,7 +96,8 @@ class AdminViewHtml extends AdminViewBase
 
         $tab = (isset($_REQUEST['tab'])) ? trim($_REQUEST['tab']) : $this->default_tab_view;
         switch ($tab) {
-            case "optimization":
+            case "code":
+            case "links":
             case "intro":
                 $view_key = 'html-' . $tab;
             break;
@@ -117,18 +118,46 @@ class AdminViewHtml extends AdminViewBase
     {
         // HTML Optimization
 
-        $tab = (isset($_REQUEST['tab'])) ? trim($_REQUEST['tab']) : 'optimization';
+        $tab = (isset($_REQUEST['tab'])) ? trim($_REQUEST['tab']) : 'code';
 
         switch ($tab) {
-            case "optimization":
+            case "code":
 
                 $forminput->type_verify(array(
                     'html.minify.enabled' => 'bool',
                     'html.minify.minifier' => 'string',
                     'html.remove_comments.enabled' => 'bool',
                     'html.remove_comments.preserve' => 'newline_array',
-                    'html.replace' => 'json-array',
+                    'html.replace' => 'json-array'
+                ));
 
+                $minifier = $forminput->get('html.minify.minifier');
+                if ($minifier === 'voku-htmlmin') {
+                    $forminput->type_verify(array(
+                        'html.minify.voku-htmlmin.doOptimizeViaHtmlDomParser' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveComments' => 'bool',
+                        'html.minify.voku-htmlmin.doSumUpWhitespace' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveWhitespaceAroundTags' => 'bool',
+                        'html.minify.voku-htmlmin.doOptimizeAttributes' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveHttpPrefixFromAttributes' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveDefaultAttributes' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveDeprecatedAnchorName' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveDeprecatedScriptCharsetAttribute' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveDeprecatedTypeFromScriptTag' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveDeprecatedTypeFromStylesheetLink' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveEmptyAttributes' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveValueFromEmptyInput' => 'bool',
+                        'html.minify.voku-htmlmin.doSortCssClassNames' => 'bool',
+                        'html.minify.voku-htmlmin.doSortHtmlAttributes' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveSpacesBetweenTags' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveOmittedQuotes' => 'bool',
+                        'html.minify.voku-htmlmin.doRemoveOmittedHtmlTags' => 'bool'
+                    ));
+                }
+            break;
+            case "links":
+
+                $forminput->type_verify(array(
                     'html.linkfilter.enabled' => 'bool',
                     'html.linkfilter.filter.enabled' => 'bool',
                     'html.linkfilter.filter.type' => 'string',
@@ -164,29 +193,6 @@ class AdminViewHtml extends AdminViewBase
                     ));
                 }
 
-                $minifier = $forminput->get('html.minify.minifier');
-                if ($minifier === 'voku-htmlmin') {
-                    $forminput->type_verify(array(
-                        'html.minify.voku-htmlmin.doOptimizeViaHtmlDomParser' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveComments' => 'bool',
-                        'html.minify.voku-htmlmin.doSumUpWhitespace' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveWhitespaceAroundTags' => 'bool',
-                        'html.minify.voku-htmlmin.doOptimizeAttributes' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveHttpPrefixFromAttributes' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveDefaultAttributes' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveDeprecatedAnchorName' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveDeprecatedScriptCharsetAttribute' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveDeprecatedTypeFromScriptTag' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveDeprecatedTypeFromStylesheetLink' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveEmptyAttributes' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveValueFromEmptyInput' => 'bool',
-                        'html.minify.voku-htmlmin.doSortCssClassNames' => 'bool',
-                        'html.minify.voku-htmlmin.doSortHtmlAttributes' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveSpacesBetweenTags' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveOmittedQuotes' => 'bool',
-                        'html.minify.voku-htmlmin.doRemoveOmittedHtmlTags' => 'bool'
-                    ));
-                }
             break;
         }
     }
