@@ -98,6 +98,7 @@ class AdminViewHtml extends AdminViewBase
         switch ($tab) {
             case "code":
             case "links":
+            case "images":
             case "intro":
                 $view_key = 'html-' . $tab;
             break;
@@ -190,6 +191,31 @@ class AdminViewHtml extends AdminViewBase
                 if ($forminput->bool('html.linkfilter.cdn.enabled')) {
                     $forminput->type_verify(array(
                         'html.linkfilter.cdn.url' => 'string'
+                    ));
+                }
+
+            break;
+            case "images":
+
+                $forminput->type_verify(array(
+                    'html.imagefilter.enabled' => 'bool',
+                    'html.imagefilter.filter.enabled' => 'bool',
+                    'html.imagefilter.filter.type' => 'string',
+
+                    'html.imagefilter.cdn.enabled' => 'bool'
+                ));
+
+                // link filter
+                if ($forminput->bool('html.imagefilter.enabled')) {
+                    $forminput->type_verify(array(
+                        'html.imagefilter.filter.config' => 'json-array'
+                    ));
+                }
+
+                // cdn
+                if ($forminput->bool('html.imagefilter.cdn.enabled')) {
+                    $forminput->type_verify(array(
+                        'html.imagefilter.cdn.url' => 'string'
                     ));
                 }
 

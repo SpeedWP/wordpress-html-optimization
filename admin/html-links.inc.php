@@ -19,7 +19,7 @@ $this->form_start(__('HTML Link Optimization', 'o10n'), 'html');
 
 <table class="form-table">
     <tr valign="top">
-        <th scope="row">Link filter</th>
+        <th scope="row"><span style="color:brown"><span style="color:mediumblue">&lt;</span>a<span style="color:red"> href</span><span style="color:mediumblue">&gt;</span></span> filter</th>
         <td>
 
             <label><input type="checkbox" name="o10n[html.linkfilter.enabled]" data-json-ns="1" value="1"<?php $checked('html.linkfilter.enabled', true); ?> /> Enabled</label>
@@ -27,7 +27,7 @@ $this->form_start(__('HTML Link Optimization', 'o10n'), 'html');
 
             <div class="info_yellow" data-ns="html.linkfilter"<?php $visible('html.linkfilter'); ?>>When enabled, you can use the WordPress filter <code>o10n_link_filter</code> to apply custom optimization to links. (<a href="javascript:void(0);" onclick="jQuery('#wp_link_filter').fadeToggle();">show example</a>)
                 <pre id="wp_link_filter" style="display:none;" class="clickselect" title="<?php print esc_attr('Click to select', 'optimization'); ?>" style="cursor:copy;padding: 10px;margin: 0 1px;margin-top:5px;font-size: 13px;">/* Link optimization filter */
-add_filter('o10n_link_filter', function($link, $href, $set_attrs, $set_class) {
+add_filter('o10n_link_filter', function($link, $href, $set_attrs, $set_class, $rename_attrs, $delete_attrs) {
     
     // apply custom optimization to &lt;a href...&gt; tag or href link
 
@@ -38,12 +38,18 @@ add_filter('o10n_link_filter', function($link, $href, $set_attrs, $set_class) {
     $set_class[] = 'classX';
     $set_class[] = 'classY';
 
+    // delete attribute
+    $delete_attrs[] = 'data-to-delete';
+
+    // rename attribute
+    $rename_attrs['src-attr'] = 'data-src-attr';
+
     // return modified link tag, href and attributes
-    return array($link, $href, $set_attrs, $set_class);
+    return array($link, $href, $set_attrs, $set_class, $rename_attrs, $delete_attrs);
 
     // alternatively, return the modified tag as a string
     // return $link;
-}, 10, 4);</pre>
+}, 10, 6);</pre>
             </div>
 
             <div class="suboption" data-ns="html.linkfilter"<?php $visible('html.linkfilter'); ?>>

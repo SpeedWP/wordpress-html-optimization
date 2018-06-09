@@ -25,6 +25,10 @@ class Html extends Controller implements Controller_Interface
     private $link_filter_type = 'include';
     private $link_cdn = false;
 
+    private $image_filter = false;
+    private $image_filter_type = 'include';
+    private $image_cdn = false;
+
     private $minifier; // minifier
     
     /**
@@ -140,6 +144,24 @@ class Html extends Controller implements Controller_Interface
         }
 
         /**
+         * Optimize images
+         */
+        if ($this->options->bool('html.imagefilter.enabled')) {
+            
+            // CDN
+            if ($this->options->bool('html.imagefilter.cdn.enabled')) {
+                $this->image_cdn = $this->options->get('html.imagefilter.cdn.url');
+            }
+
+            // verify cache policy
+            $this->image_filter = $this->options->get('html.imagefilter.filter.config', array());
+            $this->image_filter_type = $this->options->get('html.imagefilter.filter.type', 'include');
+
+            // add filter for HTML output
+            add_filter('o10n_html', array( $this, 'filter_images' ), 800, 1);
+        }
+
+        /**
          * Minify HTML
          */
         if ($this->options->bool('html.minify.enabled')) {
@@ -184,6 +206,18 @@ class Html extends Controller implements Controller_Interface
             $set_attrs = array();
         }
 
+        // attributes to delete
+        $delete_attrs = apply_filters('o10n_link_filter_delete_attributes', array());
+        if (!is_array($delete_attrs)) {
+            $delete_attrs = array();
+        }
+
+        // attributes to rename
+        $rename_attrs = apply_filters('o10n_link_filter_rename_attributes', array());
+        if (!is_array($rename_attrs)) {
+            $rename_attrs = array();
+        }
+
         // classes to add
         $set_class = apply_filters('o10n_link_filter_set_class', array());
         if (is_string($set_class)) {
@@ -194,7 +228,7 @@ class Html extends Controller implements Controller_Interface
         }
 
         // apply WordPress filter
-        $filtered = apply_filters('o10n_link_filter', $link, $href, $set_attrs, $set_class);
+        $filtered = apply_filters('o10n_link_filter', $link, $href, $set_attrs, $set_class, $rename_attrs, $delete_attrs);
 
         // skip filter
         if ($filtered === false) {
@@ -226,6 +260,16 @@ class Html extends Controller implements Controller_Interface
             // add classes
             if (isset($filtered[3]) && is_array($filtered[3])) {
                 $set_attrs = $filtered[3];
+            }
+
+            // rename attributes
+            if (isset($filtered[4]) && is_array($filtered[4])) {
+                $rename_attrs = $filtered[4];
+            }
+
+            // delete attributes
+            if (isset($filtered[5]) && is_array($filtered[5])) {
+                $delete_attrs = $filtered[5];
             }
         }
 
@@ -265,7 +309,19 @@ class Html extends Controller implements Controller_Interface
                 // attributes
                 if (isset($filterMatch['attributes']) && is_array($filterMatch['attributes'])) {
                     foreach ($filterMatch['attributes'] as $attr) {
-                        if (isset($attr['param']) && isset($attr['value'])) {
+
+                        // delete attribute
+                        if (isset($attr['delete'])) {
+                            if ($attr['delete']) {
+                                $delete_attrs[] = $attr['delete'];
+                            }
+                        } elseif (isset($attr['rename'])) {
+                            // rename attribute
+                            if (isset($attr['param']) && $attr['param']) {
+                                $rename_attrs[$attr['rename']] = $attr['param'];
+                            }
+                        } elseif (isset($attr['param']) && isset($attr['value'])) {
+                            // set attribute value
                             $set_attrs[$attr['param']] = $attr['value'];
                         }
                     }
@@ -324,6 +380,37 @@ class Html extends Controller implements Controller_Interface
             $set_attrs['class'] = trim($class . ' ' . implode(' ', $set_class));
         }
 
+        // delete attributes
+        if (!empty($delete_attrs)) {
+            foreach ($delete_attrs as $param) {
+                // remove
+                $link = $this->regex->attr($param, $link, -1);
+            }
+        }
+
+        // rename attributes
+        if (!empty($rename_attrs)) {
+            foreach ($rename_attrs as $from => $param) {
+
+                // verify if param exists
+                $exists = $this->regex->attr($from, $link);
+                if ($exists !== false) {
+                    
+                    // overwrite set param
+                    if (isset($set_attrs[$from])) {
+                        $set_attrs[$param] = $set_attrs[$from];
+                        unset($set_attrs[$from]);
+                    } else {
+                        // set new param
+                        $set_attrs[$param] = $exists;
+                    }
+
+                    // delete old param
+                    $link = $this->regex->attr($from, $link, -1);
+                }
+            }
+        }
+
         // add attributes to link
         if (!empty($set_attrs)) {
             $attrs = '';
@@ -346,6 +433,262 @@ class Html extends Controller implements Controller_Interface
         }
 
         return $link;
+    }
+
+    /**
+     * Optimize images
+     *
+     * @return string
+     */
+    final public function filter_images($HTML)
+    {
+        return preg_replace_callback(
+            '|<img\s[^>]*>|si',
+            array($this,'filter_image_tag'),
+            $HTML
+        );
+    }
+
+    /**
+     * Filter individual image tag
+     *
+     * @return string
+     */
+    final public function filter_image_tag($matches)
+    {
+        $img = $matches[0];
+
+        // extract src
+        $src = $this->regex->attr('src', $img);
+        
+        // extract srcset
+        $srcset = $this->regex->attr('srcset', $img);
+
+        // attributes to add
+        $set_attrs = apply_filters('o10n_image_filter_set_attributes', array());
+        if (!is_array($set_attrs)) {
+            $set_attrs = array();
+        }
+
+        // attributes to delete
+        $delete_attrs = apply_filters('o10n_image_filter_delete_attributes', array());
+        if (!is_array($delete_attrs)) {
+            $delete_attrs = array();
+        }
+
+        // attributes to rename
+        $rename_attrs = apply_filters('o10n_image_filter_rename_attributes', array());
+        if (!is_array($rename_attrs)) {
+            $rename_attrs = array();
+        }
+
+        // classes to add
+        $set_class = apply_filters('o10n_image_filter_set_class', array());
+        if (is_string($set_class)) {
+            $set_class = array($set_class);
+        }
+        if (!is_array($set_class)) {
+            $set_class = array();
+        }
+
+        // apply WordPress filter
+        $filtered = apply_filters('o10n_image_filter', $img, $src, $srcset, $set_attrs, $set_class, $rename_attrs, $delete_attrs);
+
+        // skip filter
+        if ($filtered === false) {
+            return $img;
+        }
+
+        // process filter result
+        if (is_string($filtered) && $filtered !== $img) {
+            $img = $filtered;
+        } elseif (is_array($filtered) && isset($filtered[0])) {
+
+            // tag replace
+            if ($filtered[0] !== $img) {
+                $img = $filtered[0];
+            }
+
+            // add attributes
+            if (isset($filtered[3]) && is_array($filtered[3])) {
+                $set_attrs = $filtered[3];
+            }
+
+            // src replace
+            if (isset($filtered[1]) && $filtered[1] !== $src) {
+
+                // overwrite
+                $src = $set_attrs['src'] = $filtered[1];
+            }
+
+            // srcset replace
+            if (isset($filtered[2]) && $filtered[2] !== $srcset) {
+
+                // overwrite
+                $srcset = $set_attrs['srcset'] = $filtered[2];
+            }
+
+            // add classes
+            if (isset($filtered[4]) && is_array($filtered[4])) {
+                $set_attrs = $filtered[4];
+            }
+
+            // rename attributes
+            if (isset($filtered[5]) && is_array($filtered[5])) {
+                $rename_attrs = $filtered[5];
+            }
+
+            // delete attributes
+            if (isset($filtered[6]) && is_array($filtered[6])) {
+                $delete_attrs = $filtered[6];
+            }
+        }
+
+        // default optimization settings
+        $cdn = $this->image_cdn;
+
+        if ($this->image_filter) {
+            $filterMatch = $this->match_image_filter($img, $this->image_filter, $this->image_filter_type);
+
+            // do not filter link
+            if (!$filterMatch) {
+                return $img;
+            }
+
+            if (is_array($filterMatch)) {
+
+                // classes
+                if (isset($filterMatch['class'])) {
+                    if (is_string($filterMatch['class'])) {
+                        $filterMatch['class'] = array($filterMatch['class']);
+                    }
+                    if (is_array($filterMatch['class'])) {
+                        $set_class = array_merge($set_class, $filterMatch['class']);
+                    }
+                }
+
+                // attributes
+                if (isset($filterMatch['attributes']) && is_array($filterMatch['attributes'])) {
+                    foreach ($filterMatch['attributes'] as $attr) {
+
+                        // delete attribute
+                        if (isset($attr['delete'])) {
+                            if ($attr['delete']) {
+                                $delete_attrs[] = $attr['delete'];
+                            }
+                        } elseif (isset($attr['rename'])) {
+                            // rename attribute
+                            if (isset($attr['param']) && $attr['param']) {
+                                $rename_attrs[$attr['rename']] = $attr['param'];
+                            }
+                        } elseif (isset($attr['param']) && isset($attr['value'])) {
+                            // set attribute value
+                            $set_attrs[$attr['param']] = $attr['value'];
+                        }
+                    }
+                }
+
+                // CDN
+                if (isset($filterMatch['cdn'])) {
+                    if (!$filterMatch['cdn']) {
+                        $cdn = false;
+                    } elseif (is_array($filterMatch['cdn']) && isset($filterMatch['cdn']['url'])) {
+                        $cdn = array($filterMatch['cdn']['url']);
+                        if (isset($filterMatch['cdn']['mask'])) {
+                            $cdn[] = $filterMatch['cdn']['mask'];
+                        }
+                    }
+                }
+            }
+        }
+
+        // apply CDN
+        // @todo support srcset
+        if ($cdn && $src) {
+            if (substr($src, 0, 1) === '/' || substr($src, 0, 1) === '.' || substr($src, 0, 4) === 'http') {
+                // valid http link
+            } elseif (preg_match('|^[a-z]+:|i')) {
+                // javascript: etc.
+                $cdn = false;
+            }
+            if ($cdn) {
+                if (!is_array($cdn)) {
+                    $cdn = array($cdn);
+                }
+                $cdn_src = $this->url->cdn($src, $cdn);
+                if ($cdn_src !== $src) {
+                    $set_attrs['src'] = $cdn_src;
+                }
+            }
+        }
+
+        // set classes
+        if (!empty($set_class)) {
+            $exist = $this->regex->attr('class', $img);
+            if ($exist) {
+                $set_class = array_merge($set_class, explode(' ', $exist));
+
+                // remove
+                $img = $this->regex->attr('class', $img, -1);
+            }
+
+            $set_class = array_unique($set_class);
+            $set_attrs['class'] = trim($class . ' ' . implode(' ', $set_class));
+        }
+
+        // delete attributes
+        if (!empty($delete_attrs)) {
+            foreach ($delete_attrs as $param) {
+                // remove
+                $img = $this->regex->attr($param, $img, -1);
+            }
+        }
+
+        // rename attributes
+        if (!empty($rename_attrs)) {
+            foreach ($rename_attrs as $from => $param) {
+
+                // verify if param exists
+                $exists = $this->regex->attr($from, $img);
+                if ($exists !== false) {
+                    
+                    // overwrite set param
+                    if (isset($set_attrs[$from])) {
+                        $set_attrs[$param] = $set_attrs[$from];
+                        unset($set_attrs[$from]);
+                    } else {
+                        // set new param
+                        $set_attrs[$param] = $exists;
+                    }
+
+                    // delete old param
+                    $img = $this->regex->attr($from, $img, -1);
+                }
+            }
+        }
+
+        // add attributes to link
+        if (!empty($set_attrs)) {
+            $attrs = '';
+            foreach ($set_attrs as $param => $value) {
+
+                // verify if param exists
+                $exists = $this->regex->attr($param, $img);
+                if ($exists !== false) {
+                    if ($exists !== $value) {
+                        $img = $this->regex->attr($param, $img, $value);
+                    }
+                } else {
+                    $attrs .= ' ' . $param . '="' . $value .'"';
+                }
+            }
+
+            if ($attrs !== '') {
+                $img = substr_replace($img, $attrs, strrpos($img, '>'), 0);
+            }
+        }
+
+        return $img;
     }
 
     /**
@@ -557,6 +900,67 @@ class Html extends Controller implements Controller_Interface
                 }
             } else {
                 if (strpos($link, $condition['match']) !== false) {
+
+                    // exclude link
+                    if (isset($condition['exclude']) && $condition['exclude']) {
+                        return false;
+                    } else {
+                        $match = $condition;
+                    }
+                }
+            }
+        }
+
+        return $match;
+    }
+
+    /**
+     * Match image filter
+     *
+     * @param array $filter Policy config
+     */
+    final private function match_image_filter($img, $filter, $filter_type = 'include')
+    {
+        $match = ($filter_type === 'include') ? true : false;
+
+        if (!is_array($filter)) {
+            return $match;
+        }
+
+        foreach ($filter as $condition) {
+
+            // url match
+            if (is_string($condition)) {
+                $condition = array(
+                    'match' => $condition
+                );
+            }
+
+            if (!is_array($condition)) {
+                continue;
+            }
+
+            // always process exclude filter
+            if (isset($condition['exclude']) && $condition['exclude']) {
+            } elseif ($filter_type === 'include' && is_array($match)) {
+                continue;
+            }
+
+            if (isset($condition['regex']) && $condition['regex']) {
+                try {
+                    if (preg_match($condition['match'], $img)) {
+
+                        // exclude link
+                        if (isset($condition['exclude']) && $condition['exclude']) {
+                            return false;
+                        } else {
+                            $match = $condition;
+                        }
+                    }
+                } catch (\Exception $err) {
+                }
+            } else {
+                if (strpos($img, $condition['match']) !== false) {
 
                     // exclude link
                     if (isset($condition['exclude']) && $condition['exclude']) {

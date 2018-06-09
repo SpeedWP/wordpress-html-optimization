@@ -29,6 +29,10 @@ class AdminHtml extends ModuleAdminController implements Module_Admin_Controller
         'links' => array(
             'title' => '<span class="dashicons dashicons-admin-links"></span> Link Optimization',
             'title_attr' => 'HTML Link Optimization'
+        ),
+        'images' => array(
+            'title' => '<span class="dashicons dashicons-format-image"></span> Image Optimization',
+            'title_attr' => 'HTML Image Optimization'
         )
     );
     /**
