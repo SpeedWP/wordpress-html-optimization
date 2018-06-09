@@ -73,7 +73,7 @@ add_filter('o10n_html_custom_minify', function ($HTML) {
 
 ### Link Optimization
 
-The plugin provides advanced HTML link (`<a href`) optimization that includes a MutationObserver innovation to capture and optimize script injected links. This solution enables to add `rel=noopener` to links to achieve a perfect Google Lighthouse score. 
+The plugin provides advanced HTML link (`<a href>`) optimization that includes a MutationObserver innovation to capture and optimize script injected links. This solution enables to add `rel=noopener` to links to achieve a perfect Google Lighthouse score. 
 
 A JSON config filter enables to add, rename or remove attribute and classes, modify `href` and to apply a CDN with CDN mask.
 
@@ -81,7 +81,7 @@ A JSON config filter enables to add, rename or remove attribute and classes, mod
 
 ### Image Optimization
 
-The plugin provides advanced HTML image (`<img`) optimization.
+The plugin provides advanced HTML image (`<img>`) optimization.
 
 A JSON config filter enables to add, rename or remove attributes and classes, modify `src` and `srcset` and to apply a CDN with CDN mask.
 
