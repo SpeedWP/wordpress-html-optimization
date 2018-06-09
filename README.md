@@ -61,7 +61,7 @@ add_filter('o10n_html_custom_minify', function ($HTML) {
 ```
 </details>
 
-
+ 
 ![HTML Optimization](https://github.com/o10n-x/wordpress-html-optimization/blob/master/docs/images/html-code-optimization.png)
 
 ### HtmlMin configuration
