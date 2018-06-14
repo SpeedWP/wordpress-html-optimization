@@ -784,7 +784,7 @@ class Html extends Controller implements Controller_Interface
                 default:
 
                     // load library
-                    if (!class_exists('O10n\HTMLMinify')) {
+                    if (!class_exists('\O10n\HTMLMinify', false)) {
                         require_once $this->core->modules('html')->dir_path() . 'lib/HTML.php';
                     }
                     $htmlmin = new HTMLMinify();
