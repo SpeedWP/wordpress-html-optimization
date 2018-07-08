@@ -60,6 +60,20 @@ class Html extends Controller implements Controller_Interface
             return;
         }
 
+        // setup on WordPress init hook
+        add_action('init', array($this, 'init_setup'), PHP_INT_MAX);
+    }
+
+    /**
+     * Setup controller on WordPress init
+     */
+    final public function init_setup()
+    {
+        // disabled
+        if (!$this->env->enabled('html')) {
+            return;
+        }
+
         /*
          * Preserve comments
          */
@@ -181,6 +195,11 @@ class Html extends Controller implements Controller_Interface
      */
     final public function filter_links($HTML)
     {
+        // disabled
+        if (!$this->env->enabled('html')) {
+            return $HTML;
+        }
+
         return preg_replace_callback(
             '|<a\s[^>]*href[^>]*>|si',
             array($this,'filter_link_tag'),
@@ -442,6 +461,11 @@ class Html extends Controller implements Controller_Interface
      */
     final public function filter_images($HTML)
     {
+        // disabled
+        if (!$this->env->enabled('html')) {
+            return $HTML;
+        }
+
         return preg_replace_callback(
             '|<img\s[^>]*>|si',
             array($this,'filter_image_tag'),
@@ -698,6 +722,11 @@ class Html extends Controller implements Controller_Interface
      */
     final public function process_html($HTML)
     {
+        // disabled
+        if (!$this->env->enabled('html')) {
+            return $HTML;
+        }
+        
         // verify if empty
         $HTML = trim($HTML);
         if ($HTML === '') {
