@@ -370,7 +370,7 @@ class Html extends Controller implements Controller_Interface
         if ($cdn && $href) {
             if (substr($href, 0, 1) === '/' || substr($href, 0, 1) === '.' || substr($href, 0, 4) === 'http') {
                 // valid http link
-            } elseif (preg_match('|^[a-z]+:|i')) {
+            } elseif (preg_match('|^[a-z]+:|i', $href)) {
                 // javascript: etc.
                 $cdn = false;
             }
@@ -631,7 +631,7 @@ class Html extends Controller implements Controller_Interface
         if ($cdn && $src) {
             if (substr($src, 0, 1) === '/' || substr($src, 0, 1) === '.' || substr($src, 0, 4) === 'http') {
                 // valid http link
-            } elseif (preg_match('|^[a-z]+:|i')) {
+            } elseif (preg_match('|^[a-z]+:|i', $src)) {
                 // javascript: etc.
                 $cdn = false;
             }
